@@ -1,0 +1,40 @@
+// examples/trainImageClassification.js
+// Example script to demonstrate how to train an image classification model using node-automl
+
+const automl = require('../index'); // Import the node-automl package
+
+async function trainImageClassification() {
+    const projectId = 'your-google-cloud-project-id'; // Replace with your Google Cloud project ID
+    const datasetId = 'your-automl-dataset-id'; // Replace with your AutoML dataset ID
+
+    try {
+        console.log('Starting training process...');
+        const model = await automl.trainImageClassificationModel(projectId, datasetId);
+        console.log('Model successfully trained:', model.id);
+        console.log('Model details:', model);
+    } catch (error) {
+        console.error('Error during model training:', error);
+    }
+}
+
+trainImageClassification();
+
+// examples/predictImageClassification.js
+// Example script to demonstrate how to use a trained image classification model for prediction
+
+const automl = require('../index'); // Import the node-automl package
+
+async function predictImageClassification() {
+    const modelId = 'your-trained-model-id'; // Replace with your trained model ID
+    const filePath = 'path/to/your/image.jpg'; // Replace with the path to the image you want to classify
+
+    try {
+        console.log('Starting prediction process...');
+        const prediction = await automl.predictImageClassification(modelId, filePath);
+        console.log('Prediction results:', prediction);
+    } catch (error) {
+        console.error('Error during prediction:', error);
+    }
+}
+
+predictImageClassification();

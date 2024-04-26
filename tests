@@ -1,0 +1,36 @@
+// tests/index.test.js
+// Tests for the node-automl package
+
+const { trainImageClassificationModel } = require('../index');
+const automl = require('../lib/automl');
+jest.mock('../lib/automl');
+
+describe('node-automl package', () => {
+    beforeEach(() => {
+        automl.trainImageClassificationModel.mockClear();
+    });
+
+    it('should successfully train an image classification model', async () => {
+        const mockModelId = 'model_12345';
+        automl.trainImageClassificationModel.mockResolvedValue({ id: mockModelId });
+
+        const projectId = 'test-project-id';
+        const datasetId = 'test-dataset-id';
+        const model = await trainImageClassificationModel(projectId, datasetId);
+
+        expect(automl.trainImageClassificationModel).toHaveBeenCalledWith(projectId, datasetId);
+        expect(model.id).toBe(mockModelId);
+    });
+
+    it('should throw an error if training fails', async () => {
+        const error = new Error('Training failed');
+        automl.trainImageClassificationModel.mockRejectedValue(error);
+
+        const projectId = 'test-project-id';
+        const datasetId = 'test-dataset-id';
+
+        await expect(trainImageClassificationModel(projectId, datasetId)).rejects.toThrow('Training failed');
+    });
+});
+
+// Additional tests can be added here to cover more functionalities
